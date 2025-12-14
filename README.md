@@ -30,13 +30,16 @@ Example output: hpo_2025-Aug-hierarchy.csv
 Usage: change the three commented variables to merge the NEWER ontology's JSON file and only-existing terms to output all parents/siblings of these terms in the NEWER ontology
 
 Example output: parent_output-2025-Oct.csv
+
 -------------------------------------------------------------------------------------------------------
 5.old_parent_analysis.py
 
 Usage: change three variables to check if the parents in the NEWER ontology exist in the OLDER hierarchy, the outputted file is a .csv file
 
 Example output: node_parent_analysis.csv
+
 -------------------------------------------------------------------------------------------------------
+
 6.calculate_avg.py
 
 Usage: change the two commented variables to read in the hierarchy csv file from 3.summarize_subset.py then analyze the data by depth

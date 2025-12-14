@@ -1,4 +1,6 @@
-To use IVO, first download HPO release from here: https://github.com/obophenotype/human-phenotype-ontology/releases (download the base versions). Included downloaded scripts: hp-base-2025-Oct.json & hp-base-2025-Aug.json.
+To use IVO, first download HPO release from here: https://github.com/obophenotype/human-phenotype-ontology/releases.
+
+Included downloaded scripts: hp-base-2025-Oct.json & hp-base-2025-Aug.json.
 
 Then, run subset_selection.py to filter the downloaded JSON file based on root node by following instruction:
 

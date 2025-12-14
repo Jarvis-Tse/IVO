@@ -1,0 +1,101 @@
+Node_ID,Node_Label,Parent_IDs,Parent_Children_Count (min),Parent_Max_Desc_Diff,Parent_Depth
+http://purl.obolibrary.org/obo/HP_0020003,Embryo developmental arrest,http://purl.obolibrary.org/obo/HP_0033335,4,0,3
+http://purl.obolibrary.org/obo/HP_0020004,Abnormal CSF guanidinoacetic acid concentration,http://purl.obolibrary.org/obo/HP_0500184,20,0,4
+http://purl.obolibrary.org/obo/HP_0020005,Decreased CSF guanidinoacetic acid concentration,,,,
+http://purl.obolibrary.org/obo/HP_0020007,Abnormal affect regulation,http://purl.obolibrary.org/obo/HP_0025766,2,184,4
+http://purl.obolibrary.org/obo/HP_0025003,Flail chest,http://purl.obolibrary.org/obo/HP_0002793,13,0,3
+http://purl.obolibrary.org/obo/HP_0025036,Type I radial ray deficiency,http://purl.obolibrary.org/obo/HP_0006433,2,487,5
+http://purl.obolibrary.org/obo/HP_0025054,Type II radial ray deficiency,http://purl.obolibrary.org/obo/HP_0006433,2,487,5
+http://purl.obolibrary.org/obo/HP_0025055,Type III radial ray deficiency,http://purl.obolibrary.org/obo/HP_0006433,2,487,5
+http://purl.obolibrary.org/obo/HP_0025056,Type IV radial ray deficiency,http://purl.obolibrary.org/obo/HP_0006433,2,487,5
+http://purl.obolibrary.org/obo/HP_0025067,Recurrent sepsis,http://purl.obolibrary.org/obo/HP_0100806,1,298,3
+http://purl.obolibrary.org/obo/HP_0025091,Wrist sign,http://purl.obolibrary.org/obo/HP_0100807,2,1588,5
+http://purl.obolibrary.org/obo/HP_0025111,Acquired aphakia,,,,
+http://purl.obolibrary.org/obo/HP_0025120,Abnormal circulating reverse T3 concentration,http://purl.obolibrary.org/obo/HP_0031508,6,22,3
+http://purl.obolibrary.org/obo/HP_0025183,Abnormal CD4+ T cell proportion,http://purl.obolibrary.org/obo/HP_0025540,12,0,6
+http://purl.obolibrary.org/obo/HP_0025184,Arousal parasomnia,http://purl.obolibrary.org/obo/HP_0025234,4,0,5
+http://purl.obolibrary.org/obo/HP_0025187,Sleep talking,http://purl.obolibrary.org/obo/HP_5200300,6,4,6
+http://purl.obolibrary.org/obo/HP_0025189,Hypnic jerks,http://purl.obolibrary.org/obo/HP_5200300,6,4,6
+http://purl.obolibrary.org/obo/HP_0025199,Fragmented sleep,,,,
+http://purl.obolibrary.org/obo/HP_0025288,Excessive sleep,http://purl.obolibrary.org/obo/HP_0002360,11,174,4
+http://purl.obolibrary.org/obo/HP_0025298,Extended nighttime sleep,,,,
+http://purl.obolibrary.org/obo/HP_0025299,Frequent napping,,,,
+http://purl.obolibrary.org/obo/HP_0025365,Free-running sleep pattern,http://purl.obolibrary.org/obo/HP_0006979,4,25,5
+http://purl.obolibrary.org/obo/HP_4000063,Sleep related hallucination,http://purl.obolibrary.org/obo/HP_0000738,7,34,5
+http://purl.obolibrary.org/obo/HP_4000064,Poor sleep,http://purl.obolibrary.org/obo/HP_0002360,11,174,4
+http://purl.obolibrary.org/obo/HP_6001278,Positive stool glutamate dehydrogenase test,http://purl.obolibrary.org/obo/HP_0034866,8,73,3
+http://purl.obolibrary.org/obo/HP_6001279,Retrocorneal membrane,http://purl.obolibrary.org/obo/HP_0000593,12,79,4
+http://purl.obolibrary.org/obo/HP_6001280,Adrenal hemorrhage,http://purl.obolibrary.org/obo/HP_0011732,12,0,3
+http://purl.obolibrary.org/obo/HP_6001281,Optic nerve sheath dilatation,http://purl.obolibrary.org/obo/HP_0000587,16,210,5
+http://purl.obolibrary.org/obo/HP_6001282,Right ventricular thrombus,http://purl.obolibrary.org/obo/HP_0001707,8,9,5
+http://purl.obolibrary.org/obo/HP_6001283,Disseminated candidiasis,http://purl.obolibrary.org/obo/HP_0020101,1,9,5
+http://purl.obolibrary.org/obo/HP_6001284,Phrenic neuropathy,http://purl.obolibrary.org/obo/HP_0032120,6,0,3
+http://purl.obolibrary.org/obo/HP_6001285,Glomerular basement membrane subendothelial remodeling,http://purl.obolibrary.org/obo/HP_0033282,15,0,9
+http://purl.obolibrary.org/obo/HP_6001286,Glomerular endothelium swelling,http://purl.obolibrary.org/obo/HP_0000095,15,0,8
+http://purl.obolibrary.org/obo/HP_6001287,Medullary collecting duct ectasia,http://purl.obolibrary.org/obo/HP_0004742,2,201,6
+http://purl.obolibrary.org/obo/HP_6001289,Corneal keloid,http://purl.obolibrary.org/obo/HP_0011495,6,4,5
+http://purl.obolibrary.org/obo/HP_6001290,Podocytic mitochondrial proliferation,http://purl.obolibrary.org/obo/HP_0031265,12,0,9
+http://purl.obolibrary.org/obo/HP_6001291,Elevated vitamin D metabolite ratio,http://purl.obolibrary.org/obo/HP_0100511,5,21,4
+http://purl.obolibrary.org/obo/HP_6001294,Tubular accumulation of uromodulin,http://purl.obolibrary.org/obo/HP_0032950,2,17,8
+http://purl.obolibrary.org/obo/HP_6001295,Elevated stool reducing substances,http://purl.obolibrary.org/obo/HP_0031685,16,642,2
+http://purl.obolibrary.org/obo/HP_6001296,Osteochondral lesion of talus,http://purl.obolibrary.org/obo/HP_0008365,7,0,5
+http://purl.obolibrary.org/obo/HP_6001297,Mallet toe,http://purl.obolibrary.org/obo/HP_0034398,3,718,5
+http://purl.obolibrary.org/obo/HP_6001298,Bunionette deformity,http://purl.obolibrary.org/obo/HP_0008089,3,13,5
+http://purl.obolibrary.org/obo/HP_6001299,Elevated CSF beta chorionic gonadotropin concentration,http://purl.obolibrary.org/obo/HP_0025456,15,652,2
+http://purl.obolibrary.org/obo/HP_6001300,Pigment epithelium detachment,http://purl.obolibrary.org/obo/HP_0007703,2,58,6
+http://purl.obolibrary.org/obo/HP_6001301,Retinal gliosis,http://purl.obolibrary.org/obo/HP_0000546,4,45,6
+http://purl.obolibrary.org/obo/HP_6001302,Aphakia,http://purl.obolibrary.org/obo/HP_0000517,7,37,4
+http://purl.obolibrary.org/obo/HP_6001303,Pain on thumb extension,http://purl.obolibrary.org/obo/HP_0046505,2,2,5
+http://purl.obolibrary.org/obo/HP_6001304,Fractured lunate bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001305,Fractured triquetrum bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001306,Fractured pisiform bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001307,Fractured trapezium bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001308,Fractured trapezoid bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001309,Fractured capitate bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001310,Fractured hamate bone,http://purl.obolibrary.org/obo/HP_0041248,1,16,6
+http://purl.obolibrary.org/obo/HP_6001311,Pulsatile abdominal mass,http://purl.obolibrary.org/obo/HP_0031500,0,6,3
+http://purl.obolibrary.org/obo/HP_6001312,Nonpulsatile abdominal mass,http://purl.obolibrary.org/obo/HP_0031500,0,6,3
+http://purl.obolibrary.org/obo/HP_6001313,Iatrogenic anophthalmos,http://purl.obolibrary.org/obo/HP_0012372,13,0,2
+http://purl.obolibrary.org/obo/HP_6001314,Reduced erythrocyte glutathione peroxidase,http://purl.obolibrary.org/obo/HP_0030272,17,121,3
+http://purl.obolibrary.org/obo/HP_6001315,Elevated circulating malonyl carnitine concentration,http://purl.obolibrary.org/obo/HP_0010966,4,0,6
+http://purl.obolibrary.org/obo/HP_6001316,Sertoli cell hypoplasia,http://purl.obolibrary.org/obo/HP_0000035,27,0,6
+http://purl.obolibrary.org/obo/HP_6001317,Posititve talar tilt test,http://purl.obolibrary.org/obo/HP_0034674,3,11,5
+http://purl.obolibrary.org/obo/HP_6001318,Plantar ecchymosis,http://purl.obolibrary.org/obo/HP_0031364,1,0,6
+http://purl.obolibrary.org/obo/HP_6001320,Lateral ankle pain,http://purl.obolibrary.org/obo/HP_0030840,0,5,5
+http://purl.obolibrary.org/obo/HP_6001321,Medial ankle pain,http://purl.obolibrary.org/obo/HP_0030840,0,5,5
+http://purl.obolibrary.org/obo/HP_6001322,Posterior ankle pain,http://purl.obolibrary.org/obo/HP_0030840,0,5,5
+http://purl.obolibrary.org/obo/HP_6001323,Anterior ankle pain,http://purl.obolibrary.org/obo/HP_0030840,0,5,5
+http://purl.obolibrary.org/obo/HP_6001325,Retinal periphlebitis,http://purl.obolibrary.org/obo/HP_6001165,0,13,5
+http://purl.obolibrary.org/obo/HP_6001326,Purulent pericardial effusion,http://purl.obolibrary.org/obo/HP_0001698,3,4,5
+http://purl.obolibrary.org/obo/HP_6001327,Conjunctival erosion,http://purl.obolibrary.org/obo/HP_0000502,26,83,7
+http://purl.obolibrary.org/obo/HP_6001328,Positive Mycobacterium tuberculosis sputum culture,http://purl.obolibrary.org/obo/HP_0430107,5,0,4
+http://purl.obolibrary.org/obo/HP_6001329,Increased external rotation of shoulder,http://purl.obolibrary.org/obo/HP_0430047,2,9,6
+http://purl.obolibrary.org/obo/HP_6001330,Positive trunk flexion test,http://purl.obolibrary.org/obo/HP_0001382,3,164,5
+http://purl.obolibrary.org/obo/HP_6001331,Tibiotalar arthritis,http://purl.obolibrary.org/obo/HP_0034673,9,0,5
+http://purl.obolibrary.org/obo/HP_6001332,Anterior ankle osteophyte,http://purl.obolibrary.org/obo/HP_0034673,9,0,5
+http://purl.obolibrary.org/obo/HP_6001333,Midfoot arthritis,http://purl.obolibrary.org/obo/HP_0001832,25,1320,4
+http://purl.obolibrary.org/obo/HP_6001334,Decreased circulating reverse T3 concentration,,,,
+http://purl.obolibrary.org/obo/HP_6001336,Hairy kidney sign,http://purl.obolibrary.org/obo/HP_0012210,31,0,5
+http://purl.obolibrary.org/obo/HP_6001337,White appearance of duodenal mucosa,http://purl.obolibrary.org/obo/HP_0002246,7,2,6
+http://purl.obolibrary.org/obo/HP_6001338,Acromioclavicular joint separation,http://purl.obolibrary.org/obo/HP_0000889,15,46,6
+http://purl.obolibrary.org/obo/HP_6001339,Acromioclavicular joint arthritis,http://purl.obolibrary.org/obo/HP_0000889,15,46,6
+http://purl.obolibrary.org/obo/HP_6001340,Positive shoulder cross-body adduction test,http://purl.obolibrary.org/obo/HP_0033129,6,355,4
+http://purl.obolibrary.org/obo/HP_6001341,Proximal humeral epiphysiolysis,http://purl.obolibrary.org/obo/HP_0010598,0,2,5
+http://purl.obolibrary.org/obo/HP_6001342,Positive anterior drawer test,http://purl.obolibrary.org/obo/HP_0034674,3,11,5
+http://purl.obolibrary.org/obo/HP_6001343,Peroneal tendon tear,http://purl.obolibrary.org/obo/HP_0034673,9,0,5
+http://purl.obolibrary.org/obo/HP_6001344,Fifth metatarsal apophysitis,http://purl.obolibrary.org/obo/HP_0008089,3,13,5
+http://purl.obolibrary.org/obo/HP_6001345,Tibial tubercle apophysitis,http://purl.obolibrary.org/obo/HP_0002992,15,197,4
+http://purl.obolibrary.org/obo/HP_6001346,Enteric anendocrinosis,http://purl.obolibrary.org/obo/HP_0002242,22,0,4
+http://purl.obolibrary.org/obo/HP_6001347,Metatarsal head osteochondrosis,http://purl.obolibrary.org/obo/HP_0001832,25,1320,4
+http://purl.obolibrary.org/obo/HP_6001348,Hallux sesamoiditis,http://purl.obolibrary.org/obo/HP_0001844,10,548,5
+http://purl.obolibrary.org/obo/HP_6001349,Os trigonum,http://purl.obolibrary.org/obo/HP_0008365,7,0,5
+http://purl.obolibrary.org/obo/HP_6001350,Positive heel squeeze test,http://purl.obolibrary.org/obo/HP_0034674,3,11,5
+http://purl.obolibrary.org/obo/HP_6001351,Calcaneal apophysitis,http://purl.obolibrary.org/obo/HP_0008364,7,0,5
+http://purl.obolibrary.org/obo/HP_6001352,Decreased circulating guanidinoacetic acid concentration,http://purl.obolibrary.org/obo/HP_0033108,9,66,6
+http://purl.obolibrary.org/obo/HP_6001353,Elevated circulating C-triol concentration,http://purl.obolibrary.org/obo/HP_0003119,12,69,4
+http://purl.obolibrary.org/obo/HP_6001354,Germinal vesicle oocyte maturation arrest,http://purl.obolibrary.org/obo/HP_0034914,1,0,7
+http://purl.obolibrary.org/obo/HP_6001355,Metaphase II oocyte maturation arrest,http://purl.obolibrary.org/obo/HP_0034914,1,0,7
+http://purl.obolibrary.org/obo/HP_6001356,Mixed oocyte maturation arrest,http://purl.obolibrary.org/obo/HP_0034914,1,0,7
+http://purl.obolibrary.org/obo/HP_6001357,Dorsal forearm pain,http://purl.obolibrary.org/obo/HP_6000299,0,23,3
+http://purl.obolibrary.org/obo/HP_6001358,Volar forearm pain,http://purl.obolibrary.org/obo/HP_6000299,0,23,3
+http://purl.obolibrary.org/obo/HP_6001359,Subcutaneous abscess,http://purl.obolibrary.org/obo/HP_0011123,20,0,4

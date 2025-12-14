@@ -1,0 +1,621 @@
+---
+format:
+  html:
+    grid:
+      sidebar-width: 200px
+      body-width: 2000px
+      margin-width: 10px
+---
+
+#install.packages("jsonlite")
+#install.packages("tidyverse")
+#install.packages("igraph")
+#install.packages("ggplot2")
+#install.packages("visNetwork")
+#install.packages("shinyWidgets")
+
+```{r}
+library(jsonlite)
+library(tidyverse)
+library(igraph)
+library(ggplot2)
+library(dplyr)
+library(purrr)
+library(visNetwork)
+library(shiny)
+library(shinyWidgets)
+```
+
+```{r}
+# IDs to emphasize for comparing different HPO versions
+root_item_name <- "Abnormality of the skeletal system"
+
+# read in the data
+# Load JSON
+data <- fromJSON(paste0("./",root_item_name,".json"), simplifyVector = FALSE)
+
+# Extract nodes and edges
+node_data <- data$graphs[[1]]$nodes
+edge_data <- data$graphs[[1]]$edges
+
+# Build edge list
+edges <- map(edge_data, ~ list(.x$sub, .x$obj))
+
+# Store a specific number of nodes
+count_limit <- 5000
+nodes <- vector("list", min(length(node_data), count_limit))
+for (i in seq_len(length(nodes))) {
+  n <- node_data[[i]]
+  nodes[[i]] <- list(n$id, n$lbl)
+}
+
+# Convert to data frames
+base_nodes_df <- map_dfr(nodes, ~ tibble(id = .x[[1]], label = .x[[2]]))
+base_edges_df <- map_dfr(edges, ~ tibble(from = .x[[1]], to = .x[[2]]))
+
+# UI
+ui <- fluidPage(
+  tags$head(
+    tags$script(HTML('
+      Shiny.addCustomMessageHandler("resetClickedNode", function(message) {
+        Shiny.setInputValue(\'clicked_node_id\', null)
+      });
+    '))
+  ),
+
+  div(
+    style = "padding: 10px; background-color: #f5f5f5; border-bottom: 1px solid #ddd;",
+    fluidRow(
+      chooseSliderSkin(skin=c("Shiny"), color = "Black"),
+      column(3,
+        sliderInput("max_depth", "Displayed Depth:", 
+                    min = 1, max = 10, value = 4, step = 1)
+      ),
+      column(3,
+        sliderInput("diff_threshold", "Sibling Granularity Difference Threshold:", 
+                    min = 0, max = 50, value = 25, step = 1)
+      ),
+      column(3,
+        textInput("root_term", "Root Term:", 
+                  value = root_item_name, width = "100%")
+      ),
+      column(3,
+        checkboxInput("use_default_root", paste0("Use default root (", root_item_name,")"), value = FALSE)
+      )
+    ),
+    fluidRow(
+      column(4,
+        textInput("filter_term", "Filter by Term:", 
+                  value = root_item_name, width = "100%")
+      ),
+      column(2,
+        checkboxInput("enable_filter", "Enable Term Filtering", value = FALSE)
+      ),
+      column(3,
+        textInput("highlight_term", "Identify Term:", 
+                  value = root_item_name, width = "100%")
+      ),
+      column(3,
+        checkboxInput("use_highlight_term", paste0("Use highlight term"), value = FALSE)
+      )
+    )
+  ),
+  visNetworkOutput("network", height = "1000px"),
+  
+ # Legend for node shapes
+  div(
+    style = "position: absolute; top: 200px; left: 20px; background: rgba(255,255,255,0.95); padding: 3px; border-radius: 5px; border: 2px solid #333; z-index: 1000;font-size: 10px;",
+    h4("Legend", style = "margin-top: 0; margin-bottom: 10px; color: #333;"),
+    div(style = "margin-bottom: 5px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;", "Node Shapes"),
+    div(style = "margin-bottom: 8px;",
+      span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 3px; background: black; vertical-align: middle; margin-right: 8px;"),
+      span("Leaf nodes (with # of unshown descendant levels)", style = "color: #333; vertical-align: middle;")
+    ),
+    div(style = "margin-bottom: 8px;",
+      span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 50%; background: black; vertical-align: middle; margin-right: 8px;"),
+      span("Non-leaf nodes", style = "color: #333; vertical-align: middle;")
+    ),
+    div(style = "margin-bottom: 12px;",
+      span(style = "display: inline-block; width: 30px; height: 20px; border: 2px solid #333; border-radius: 10px; background: black; vertical-align: middle; margin-right: 8px;"),
+      span("Root node", style = "color: #333; vertical-align: middle;")
+    ),
+    div(style = "margin-bottom: 5px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px;", "Node Colors"),
+    div(style = "margin-bottom: 8px;",
+      span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 50%; background: #5AA75F; vertical-align: middle; margin-right: 8px;"),
+      span("Sibling with low a granularity", style = "color: #333; vertical-align: middle;")
+    ),
+    div(style = "margin-bottom: 8px;",
+      span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 50%; background: #468dd4; vertical-align: middle; margin-right: 8px;"),
+      span("Single child", style = "color: #333; vertical-align: middle;")
+    ),
+    # div(style = "margin-bottom: 8px;",
+    #   span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 50%; background: purple; vertical-align: middle; margin-right: 8px;"),
+    #   span("Emphasized", style = "color: #333; vertical-align: middle;")
+    # ),
+    div(style = "margin-bottom: 0px;",
+      span(style = "display: inline-block; width: 20px; height: 20px; border: 2px solid #333; border-radius: 50%; background: pink; vertical-align: middle; margin-right: 8px;"),
+      span("Highlighted term", style = "color: #333; vertical-align: middle;")
+    )
+  ),
+  # Display area for clicked node info
+  div(
+    style = "position: absolute; top: 200px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 15px; border-radius: 5px; z-index: 1000;",
+    h4("Selected Node Information", style = "margin-top: 0;"),
+    uiOutput("node_info")
+  )
+)
+
+# Server
+server <- function(input, output, session) {
+  # Add a reactive value to track first render
+  base_data_processed <- reactiveVal(NULL)
+  
+  # Reset clicked_node_id when any control changes
+  observeEvent({
+    input$max_depth
+    input$diff_threshold
+    input$filter_term
+    input$enable_filter
+    input$root_term
+    input$use_default_root
+    input$highlight_term
+    input$use_highlight_term
+  }, {
+    session$sendCustomMessage(type = 'resetClickedNode', message = list(a="placeholder"))
+  }, ignoreInit = TRUE)
+
+  
+  # Helper functions
+  find_descendants <- function(node, inputted_edges_df) {
+    descendants <- node
+    to_visit <- node
+    
+    while(length(to_visit) > 0) {
+      current <- to_visit[1]
+      to_visit <- to_visit[-1]
+      
+      children <- inputted_edges_df$from[inputted_edges_df$to == current]
+      new_children <- setdiff(children, descendants)
+      descendants <- c(descendants, new_children)
+      to_visit <- c(to_visit, new_children)
+    }
+    
+    return(descendants)
+  }
+  
+  find_ascendants <- function(node, inputted_edges_df) {
+    ascendants <- node
+    to_visit <- node
+    
+    while(length(to_visit) > 0) {
+      current <- to_visit[1]
+      to_visit <- to_visit[-1]
+      
+      parents <- inputted_edges_df$to[inputted_edges_df$from == current]
+      new_parents <- setdiff(parents, ascendants)
+      ascendants <- c(ascendants, new_parents)
+      to_visit <- c(to_visit, new_parents)
+    }
+    
+    return(ascendants)
+  }
+  
+  # Reactive data processing
+  processed_data <- reactive({
+    # Get parameters from UI inputs
+    max_depth <- input$max_depth
+    diff_threshold <- input$diff_threshold
+    filter_by_term <- input$filter_term
+    draw_only_nodes_connected_to_a_specific_term <- input$enable_filter
+    root_term_label <- input$root_term
+    use_default_root <- input$use_default_root
+    highlight_term <- input$highlight_term
+    use_highlight_term <- input$use_highlight_term
+    
+
+  if(is.null(base_data_processed())) {
+      print("Processing base data for first time")
+      edges_swapped_df <- base_edges_df[, c("to", "from")]
+      drawn_graph <- graph_from_data_frame(edges_swapped_df, vertices = base_nodes_df, directed = TRUE)
+
+      # Initialize vector for calculating subtree heights and number of descendants
+      num_desc <- numeric(vcount(drawn_graph))
+      names(num_desc) <- V(drawn_graph)$name
+      subtree_height <- numeric(vcount(drawn_graph))
+      names(subtree_height) <- V(drawn_graph)$name
+
+      # Loop over vertex names
+      for (v_name in V(drawn_graph)$name) {
+        dists <- distances(drawn_graph, v = v_name, mode = "out")[1, ]
+        dists <- dists[is.finite(dists)]
+        subtree_height[v_name] <- ifelse(length(dists) > 0, max(dists), 0)
+
+        dists <- distances(drawn_graph, v = v_name, mode = "out")[1, ]
+        num_desc[v_name] <- sum(is.finite(dists) & dists > 0)
+      }
+
+      # Add to data frame
+      base_nodes_df$subtree_height <- subtree_height[base_nodes_df$id]
+      base_nodes_df$num_desc <- num_desc[base_nodes_df$id]
+      base_data_processed(base_nodes_df)
+    }
+    
+    # Start with base data
+    nodes_df <- base_data_processed()
+    edges_df <- base_edges_df
+    
+    # Apply term filtering if enabled
+    if(draw_only_nodes_connected_to_a_specific_term && nchar(filter_by_term) > 0){
+      terms <- nodes_df[grepl(filter_by_term, nodes_df$label, ignore.case = TRUE), ]
+      if(nrow(terms) > 0) {
+        term <- terms[[1]]
+        descendant_ids <- find_descendants(term, edges_df)
+        ascendant_ids <- find_ascendants(term, edges_df)
+        nodes_df <- nodes_df[nodes_df$id %in% descendant_ids | nodes_df$id %in% ascendant_ids, ]
+      }
+    }
+    
+    # Find root
+    if(use_default_root || nchar(root_term_label) == 0){
+      roots <- nodes_df$id[!(nodes_df$id %in% edges_df$from)]
+      root <- roots[1]
+    } else {
+      roots <- nodes_df[grepl(root_term_label, nodes_df$label, ignore.case = TRUE), ]
+      root <- roots[[1]]
+    }
+    
+    # Get all descendants including the root itself
+    descendant_ids <- find_descendants(root, edges_df)
+    
+    # Filter nodes_df to only include descendants
+    nodes_df <- nodes_df[nodes_df$id %in% descendant_ids, ]
+    nodes_df$is_root <- nodes_df$id == root
+    
+    # Keep only edges connecting included nodes
+    valid_ids <- nodes_df$id
+    edges_df <- edges_df |>
+      filter(from %in% valid_ids & to %in% valid_ids)
+    edges_swapped_df <- edges_df[, c("to", "from")]
+    
+    # Build igraph
+    drawn_graph <- graph_from_data_frame(edges_swapped_df, vertices = nodes_df, directed = TRUE)
+    
+      # Calculate the maximum num_desc among children for each parent
+      parent_max_child_desc <- edges_df |>
+        left_join(nodes_df |> select(id, num_desc),
+                  by = c("from" = "id")) |>
+        group_by(to) |>
+        summarise(
+          max_child_num_desc = max(num_desc, na.rm = TRUE),
+          .groups = 'drop'
+      )
+
+      # Add max_child_num_desc to nodes_df (joining where id matches the parent 'to')
+      nodes_df <- nodes_df |>
+        left_join(parent_max_child_desc, by = c("id" = "to")) |>
+        mutate(max_child_num_desc = replace_na(max_child_num_desc, 0))
+    
+    # Calculate desc_diff for each node: compare with ALL parents and take minimum difference
+    child_desc_diffs <- edges_df |>
+      left_join(nodes_df |> select(id, num_desc), by = c("from" = "id")) |>
+      rename(num_desc_child = num_desc) |>
+      left_join(nodes_df |> select(id, max_child_num_desc),
+                by = c("to" = "id")) |>
+      rename(max_child_num_desc_parent = max_child_num_desc) |>
+      mutate(
+        diff = abs(num_desc_child - max_child_num_desc_parent)
+      ) |>
+      group_by(from) |>
+      summarise(
+        desc_diff = min(diff, na.rm = TRUE),
+        .groups = 'drop'
+      )
+    
+    # Add desc_diff to nodes_df:
+    nodes_df <- nodes_df |>
+      left_join(child_desc_diffs, by = c("id" = "from")) |>
+      mutate(max_diff = replace_na(desc_diff, 0))
+    nodes_df <- nodes_df |>
+      mutate(
+        has_contrastive_sibling = desc_diff > diff_threshold
+    )
+    
+    # Compute depth for all nodes using BFS
+    bfs_res <- bfs(drawn_graph, root = c(root), dist = TRUE)
+    depths <- bfs_res$dist
+    
+    # Add depth info to nodes_df
+    nodes_df$depth <- depths[nodes_df$id]
+    
+    # Filter nodes & edges by depth (using max_depth from input)
+    nodes_df <- nodes_df |> filter(depth <= max_depth)
+    edges_df <- edges_df |> filter(from %in% nodes_df$id & to %in% nodes_df$id)
+  
+    # Store each node's parents as a list (with labels joined by ", ")
+    node_parents <- edges_df |>
+      left_join(nodes_df |> select(id, label), by = c("to" = "id")) |>
+      group_by(from) |>
+      summarise(parents = paste(label, collapse = ", "), .groups = 'drop')
+    
+    # Store each node's children as a list (with labels joined by ", ")
+    node_children <- edges_df |>
+      left_join(nodes_df |> select(id, label), by = c("from" = "id")) |>
+      group_by(to) |>
+      summarise(children = paste(label, collapse = ", "), .groups = 'drop')
+
+    # Find sole children
+    sole_children <- edges_df |>
+      group_by(to) |>
+      summarise(num_children = n(), .groups = 'drop') |>
+      filter(num_children == 1) |>
+      inner_join(edges_df, by = "to") |>
+      pull(from)
+
+    # Add parents and children to nodes_df
+    nodes_df <- nodes_df |>
+      left_join(node_parents, by = c("id" = "from")) |> 
+      left_join(node_children, by = c("id" = "to")) |>
+      mutate(
+        parents = ifelse(is.na(parents), "N/A", parents),
+        children = ifelse(is.na(children), "N/A", children)
+      )
+    
+    # Count children and parents
+    children_counts <- edges_df |>
+      group_by(to) |>
+      summarise(num_children = n(), .groups = 'drop')
+    
+    parent_counts <- edges_df |>
+      group_by(from) |>
+      summarise(num_parents = n(), .groups = 'drop')
+    
+    # store info about number of children and parents
+    nodes_df <- nodes_df |>
+      mutate(is_sole_child = id %in% sole_children) |>
+      left_join(children_counts, by = c("id" = "to")) |>
+      left_join(parent_counts, by = c("id" = "from")) |>
+      mutate(num_children = replace_na(num_children, 0),
+             num_parents = replace_na(num_parents, 0))
+  
+    drawn_graph <- graph_from_data_frame(edges_df, vertices = nodes_df, directed = TRUE)
+    
+    # Compute tree layout
+    layout <- layout_as_tree(drawn_graph, root = c(root), circular = FALSE)
+    
+    # Add coordinates to nodes
+    nodes_df <- nodes_df |>
+      mutate(x = layout[, 1], y = layout[, 2])
+    
+    # Keep only nodes connected by at least one edge
+    connected_ids <- unique(c(edges_df$from, edges_df$to))
+    nodes_df <- nodes_df |> filter(id %in% connected_ids)
+    
+    # identify leaf nodes (using max_depth from input)
+    leaf_ids <- nodes_df |> filter(depth == max_depth | subtree_height == 0) |> pull(id)
+    nodes_df$is_leaf <- nodes_df$id %in% leaf_ids
+    
+    # show id when hovered
+    nodes_df$title <- nodes_df$label
+    
+    # add labels
+    nodes_df$label <- ifelse(
+      nodes_df$is_leaf,
+      paste0(nodes_df$label, " ",nodes_df$subtree_height),
+      nodes_df$label
+    )
+    
+    # mark emphasized points
+    nodes_df <- nodes_df |>
+      mutate(emphasized = FALSE) #nodes_df$id %in% emphasized_item_ids)
+
+    
+    # choose shape
+    nodes_df$shape <- ifelse(
+      nodes_df$is_root,
+      "ellipse",
+      ifelse(
+        nodes_df$is_leaf,
+        "box",
+        "circle"
+      )
+    )
+    
+    # highlight one term if option turned on
+    # wrap spaces as line breaks
+    nodes_df <- nodes_df |>
+    mutate(is_highlighted = use_highlight_term & (title == highlight_term))|>
+    mutate(label = gsub(" ", "\n", label))
+
+    # update color based on highlight criteria
+    nodes_df <- nodes_df |>
+      mutate(color = case_when(
+        emphasized ~ "purple",
+        is_highlighted ~ "pink",
+        has_contrastive_sibling ~ "#5AA75F",
+        is_sole_child ~ "#468dd4",
+        TRUE ~ NA_character_
+      ))
+    
+    list(nodes = nodes_df, edges = edges_df)
+  })
+  
+  output$network <- renderVisNetwork({
+    data <- processed_data()
+    
+    visNetwork(data$nodes, data$edges, height = "1000px", width = "100%") |>
+      visPhysics(enabled = FALSE) |>
+      visEdges(arrows = "to", width=0.25, color=list(color = "#d3d3d3", highlight = "#ff9900"))|>
+      visNodes(
+        font = list(size = 14, face = "arial",color='white'),
+        color = list(
+          background = "black",
+          border = "#555555",
+          highlight = list(
+            background = "#ff9900",
+            border = "#ff6600"
+          )
+        )
+      ) |>
+      visOptions(highlightNearest = FALSE, nodesIdSelection = FALSE) |>
+      visHierarchicalLayout(direction = "DU", sortMethod = "directed") |>
+      visInteraction(selectConnectedEdges = FALSE, hover = FALSE) |>
+      visEvents(
+        selectNode = "
+          function(params) {
+            if (params.nodes.length > 0) {
+              var selectedNodeID = params.nodes[0];
+              
+              // Check if this node is already selected
+              if (this.lastSelectedNode === selectedNodeID) {
+                // Unselect all nodes and reset colors
+                this.unselectAll();
+                this.lastSelectedNode = null;
+                
+                // Reset all nodes to their original colors
+                var allNodes = this.body.data.nodes.get();
+                allNodes.forEach(function(n) {
+                  var color = n.is_highlighted? 'pink':(
+                    n.emphasized? 'purple': (
+                    (n.has_contrastive_sibling ? '#5AA75F' : 
+                      (n.is_sole_child ? '#468dd4' : 'black'))));
+                  this.body.data.nodes.update({ id: n.id, color: { background: color} });
+                }.bind(this));
+                
+                // Reset all edges to default
+                var allEdges = this.body.data.edges.get();
+                allEdges.forEach(function(e) {
+                  this.body.data.edges.update({ id: e.id, color: { color: '#d3d3d3' }, width: 0.5 });
+                }.bind(this));
+                
+                // Clear the info display
+                Shiny.setInputValue('clicked_node_id', null);
+                Shiny.setInputValue('clicked_node_label', null);
+                Shiny.setInputValue('clicked_node_depth', null);
+                Shiny.setInputValue('clicked_node_subtree_height', null);
+                Shiny.setInputValue('clicked_node_is_sole_child', null);
+                Shiny.setInputValue('clicked_node_max_sibling_diff', null);
+                Shiny.setInputValue('clicked_node_parents', null);
+                Shiny.setInputValue('clicked_node_children', null);
+                Shiny.setInputValue('clicked_node_num_parents', null);
+                Shiny.setInputValue('clicked_node_num_children', null);
+                Shiny.setInputValue('clicked_node_num_desc', null);
+                
+                
+                return;
+              }
+              
+              // Store the current selection
+              this.lastSelectedNode = selectedNodeID;
+              
+              var ancestors = [];
+              var direct_children = [];
+              
+              var nodeData = this.body.data.nodes.get(selectedNodeID);
+              
+              Shiny.setInputValue('clicked_node_id', selectedNodeID);
+              Shiny.setInputValue('clicked_node_label', nodeData.title);
+              Shiny.setInputValue('clicked_node_depth', nodeData.depth);
+              Shiny.setInputValue('clicked_node_subtree_height', nodeData.subtree_height);
+              Shiny.setInputValue('clicked_node_is_sole_child', nodeData.is_sole_child);
+              Shiny.setInputValue('clicked_node_max_sibling_diff', nodeData.max_diff);
+              Shiny.setInputValue('clicked_node_parents', nodeData.parents);
+              Shiny.setInputValue('clicked_node_children', nodeData.children);
+              Shiny.setInputValue('clicked_node_num_parents', nodeData.num_parents);
+              Shiny.setInputValue('clicked_node_num_children', nodeData.num_children);
+              Shiny.setInputValue('clicked_node_num_desc', nodeData.num_desc);
+              
+      
+              function findAncestors(nodeId) {
+                var parents = this.body.data.edges.get({
+                  filter: function(edge) { return edge.from === nodeId; }
+                }).map(function(edge) { return edge.to; });
+      
+                parents.forEach(function(parentId) {
+                  if (!ancestors.includes(parentId)) {
+                    ancestors.push(parentId);
+                    findAncestors.call(this, parentId);
+                  }
+                }.bind(this));
+              }
+              
+              function findDirectChildren(nodeId) {
+                direct_children = this.body.data.edges.get({
+                  filter: function(edge) { return edge.to === nodeId; }
+                }).map(function(edge) { return edge.from; });
+              }
+      
+              findAncestors.call(this, selectedNodeID);
+              findDirectChildren.call(this, selectedNodeID);
+      
+              var toSelect = ancestors.concat([selectedNodeID]);
+              toSelect = toSelect.concat(direct_children)
+              
+              this.unselectAll(toSelect)
+      
+              var allNodes = this.body.data.nodes.get();
+              
+              allNodes.forEach(function(n) {
+                var color = (n.id==selectedNodeID)?'#ff4d00': 
+                  (direct_children.includes(n.id)? '#fce392': 
+                    (toSelect.includes(n.id) ? '#ff9a00' : 
+                    n.is_highlighted? 'pink':(
+                      n.emphasized? 'purple': (
+                      (n.has_contrastive_sibling ? '#5AA75F' : 
+                        (n.is_sole_child ? '#468dd4' : 'black'))))
+                ));
+                    
+                this.body.data.nodes.update({ id: n.id, color: { background: color} });
+              }.bind(this));
+      
+              var allEdges = this.body.data.edges.get();
+              allEdges.forEach(function(e) {
+                if (toSelect.includes(e.from) && toSelect.includes(e.to)) {
+                  this.body.data.edges.update({ id: e.id, color: { color: 'red' }, width: 2 });
+                } else {
+                  this.body.data.edges.update({ id: e.id, color: { color: '#d3d3d3' }, width: 0.5 });
+                }
+              }.bind(this));
+            }
+          }"
+      )
+  })
+  
+  output$node_info <- renderUI({
+    # re-render when these components update values
+    input$max_depth
+    input$diff_threshold
+    input$filter_term
+    input$enable_filter
+    input$root_term
+    input$use_default_root
+    input$highlight_term
+    input$use_highlight_term
+    print("rendering...")
+    
+    if (!is.null(input$clicked_node_id)) {
+      HTML(paste0("ID: ", input$clicked_node_id,
+                  "<br>Label: ", input$clicked_node_label,
+                  "<br>Depth: ", input$clicked_node_depth,
+                  "<br>Height: ", input$clicked_node_subtree_height,
+                  "<br>Is Sole-Child: ", input$clicked_node_is_sole_child,
+                  "<br>Max Sibling Descendant Number Difference: ", input$clicked_node_max_sibling_diff,
+                  "<br>Parent(s): ", input$clicked_node_parents,
+                  "<br># of Displayed Parent(s): ", input$clicked_node_num_parents,
+                  "<br>Child(ren): ", input$clicked_node_children,
+                  "<br># of Displayed Child(ren): ", input$clicked_node_num_children,
+                  "<br>Total # of Descendants: ", input$clicked_node_num_desc
+
+                 )
+
+          )
+    } else {
+      "Click a node to see details"
+    }
+  })
+  
+}
+
+
+
+shinyApp(ui, server)
+```

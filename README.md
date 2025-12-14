@@ -18,6 +18,8 @@ Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the nam
 
 **Below are the instructions for reproducing the results for numeric evaluation (i.e. by checking how many nodes between the HPO releases can be flagged using the two computational methods)**
 
+-------------------------------------------------------------------------------------------------------
+
 2.compare_jsons.py
 
 Usage: python compare_jsons.py <file1.json> <file2.json>

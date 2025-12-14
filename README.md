@@ -1,7 +1,9 @@
 To use IVO, first download HPO release from here: https://github.com/obophenotype/human-phenotype-ontology/releases (download the base versions). Included downloaded scripts: hp-base-2025-Oct.json & hp-base-2025-Aug.json.
 
 Then, run subset_selection.py to filter the downloaded JSON file based on root node by following instruction:
+
 Usage: python subset_selection.py input.json output.json root_node_id
+
 Next, rename output.json to root_node_name.json. Example filtered JSON file: Abnormality of the skeletal system.json.
 
 Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the name of the name of the root node. Then, run all cells in the file. The interactive visulization will then appear.

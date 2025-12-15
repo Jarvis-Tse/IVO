@@ -25,6 +25,7 @@ Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the nam
 2.compare_jsons.py
 
 Usage: python compare_jsons.py <file1.json> <file2.json>
+
 The two JSON files should be two HPO subsets
 
 Example outputs: only_in_hp-base-2025-Aug-Abnormality of the skeletal system.txt; only_in_hp-base-2025-Oct-Abnormality of the skeletal system.txt

@@ -1,10 +1,10 @@
-To use IVO, first download HPO release from here: https://github.com/obophenotype/human-phenotype-ontology/releases.
+To use IVO, first download official HPO releases from here: https://github.com/obophenotype/human-phenotype-ontology/releases.
 
-Included downloaded scripts: hp-base-2025-Oct.json & hp-base-2025-Aug.json.
+Included downloaded releases: hp-base-2025-Oct.json & hp-base-2025-Aug.json.
 
 -------------------------------------------------------------------------------------------------------
 
-Then, run subset_selection.py to filter the downloaded JSON file based on root node by following instruction:
+Then, run subset_selection.py to filter the downloaded JSON file by following the below instruction:
 
 Usage: python subset_selection.py input.json output.json root_node_id
 
@@ -14,8 +14,7 @@ Example filtered JSON file: Abnormality of the skeletal system.json.
 
 -------------------------------------------------------------------------------------------------------
 
-
-Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the name of the name of the root node. Then, run all cells in the file. The interactive visulization will then appear.
+Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the name of the root node. Then, run all cells in the file. The interactive visualization will then appear.
 
 -------------------------------------------------------------------------------------------------------
 
@@ -34,21 +33,21 @@ Example outputs: only_in_hp-base-2025-Aug-Abnormality of the skeletal system.txt
 
 3.summarize_subset.py
 
-Usage: change the two commented variables, which correspond to the input and output files, respectively, to convert the JSON file that represents the HPO subset of the OLDER ontology being compared into the statistics for each node
+Usage: Change the two commented variables, which correspond to the input and output files, respectively, to convert the JSON file that represents the HPO subset of the OLDER ontology being compared into the statistics for each node. Run the file directly.
 
 Example output: hpo_2025-Aug-hierarchy.csv
 
 -------------------------------------------------------------------------------------------------------
 4.find_parents.py
 
-Usage: change the three commented variables to merge the NEWER ontology's JSON file and only-existing terms to output all parents/siblings of these terms in the NEWER ontology
+Usage: Change the three commented variables to merge the NEWER ontology's JSON file and only-existing terms to output all parents/siblings of these terms in the NEWER ontology. Run the file directly.
 
 Example output: parent_output-2025-Oct.csv
 
 -------------------------------------------------------------------------------------------------------
 5.old_parent_analysis.py
 
-Usage: change three variables to check if the parents in the NEWER ontology exist in the OLDER hierarchy, the outputted file is a .csv file
+Usage: Change three variables to check if the parents in the NEWER ontology exist in the OLDER hierarchy; the outputted file is a .csv file. Run the file directly.
 
 Example output: node_parent_analysis.csv
 
@@ -56,6 +55,6 @@ Example output: node_parent_analysis.csv
 
 6.calculate_avg.py
 
-Usage: change the two commented variables to read in the hierarchy csv file from 3.summarize_subset.py then analyze the data by depth
+Usage: Change the two commented variables to read in the hierarchy csv file from 3.summarize_subset.py then analyze the data by depth. Run the file directly.
 
 Example output: statistics_by_depth.csv

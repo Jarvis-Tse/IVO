@@ -8,9 +8,11 @@ Then, run subset_selection.py to filter the downloaded JSON file based on root n
 
 Usage: python subset_selection.py input.json output.json root_node_id
 
+Example filtered JSON file: Abnormality of the skeletal system.json.
+
 -------------------------------------------------------------------------------------------------------
 
-Next, rename output.json to root_node_name.json. Example filtered JSON file: Abnormality of the skeletal system.json.
+Next, rename output.json to root_node_name.json.
 
 Then, open IVO.qmd with RStudio, change the variable "root_item_name" to the name of the name of the root node. Then, run all cells in the file. The interactive visulization will then appear.
 
